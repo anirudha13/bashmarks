@@ -48,7 +48,7 @@ bookmark (){
 
 # Show a list of the bookmarks
 bookmarksshow (){
-  cat ~/.bookmarks | awk '{ printf "%-40s%-40s%s\n",$1,$2,$3}' FS=\|
+  cat ~/.bookmarks | awk '{ printf "%-80s%-40s%s\n",$1,$2,$3}' FS=\| | sort
 }
 
 go(){
@@ -64,7 +64,8 @@ go(){
     echo '  bookmark foo'
   else
     dir=`echo "$bookmark" | cut -d\| -f1`
-    cd "$dir" 
+    cd "$dir"
+    pwd 
   fi
 }
 
@@ -74,3 +75,29 @@ _go_complete(){
 }
 
 complete -C _go_complete -o default go 
+
+del() {
+  bookmark_name=$1
+
+  bookmark=`grep "|$bookmark_name$" "$bookmarks_file"`
+
+  if [[ -z $bookmark ]]; then
+    echo 'Invalid name, please provide a valid bookmark name. For example:'
+    echo '  go foo'
+    echo
+    echo 'To bookmark a folder, go to the folder then do this (naming the bookmark 'foo'):'
+    echo '  bookmark foo'
+  else
+    sed -i '.old' '/\|'"$bookmark_name"'$/d' $bookmarks_file 
+    echo "deleted entry $bookmark"
+  fi
+
+}
+
+_del_complete(){
+  # Get a list of bookmark names, then grep for what was entered to narrow the list
+  cat $bookmarks_file | cut -d\| -f2 | grep "$2.*"
+}
+
+complete -C _del_complete -o default del 
+
