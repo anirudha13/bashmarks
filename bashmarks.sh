@@ -13,11 +13,14 @@
 # When you want to get back to that folder use:
 #   go foo
 #
+#When you want to delete a bookmark that you no longer want, use:
+#  del foo
+#
 # To see a list of bookmarks:
 #   bookmarksshow
 # 
 # Tab completion works, to go to the shoobie bookmark:
-#   go sho[tab]
+#   go sho[tab] del sho[tab]
 # 
 # Your bookmarks are stored in the ~/.bookmarks file
 
